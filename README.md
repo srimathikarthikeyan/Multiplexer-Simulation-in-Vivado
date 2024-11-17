@@ -48,10 +48,14 @@ Take screenshots of the waveform window and include them in your lab report to d
 You can include the timing diagram from the simulation window showing the correct functionality of the 4:1 MUX across different select inputs and data inputs.
 10. Close the Simulation
 Once done, close the simulation by going to Simulation → "Close Simulation".
+
+
 # LOGIC DIAGRAM
 ![Screenshot 2024-09-09 080858](https://github.com/user-attachments/assets/54f82207-5f07-4e3b-8b44-cdec1a710430)
 # TRUTH TABLE
 ![image](https://github.com/user-attachments/assets/c850506c-3f6e-4d6b-8574-939a914b2a5f)
+
+
 # VERILOG CODE
 # 4:1 MUX Gate-Level Implementation
     mux4_to_1_gate.v
