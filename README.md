@@ -1,11 +1,8 @@
 # SIMULATION AND IMPLEMENTATION OF LOGIC GATES
-
 # AIM:
 To design and simulate a 4:1 Multiplexer (MUX) using Verilog HDL in four different modeling styles—Gate-Level, Data Flow, Behavioral, and Structural—and to verify its functionality through a testbench using the Vivado 2023.1 simulation environment. The experiment aims to understand how different abstraction levels in Verilog can be used to describe the same digital logic circuit and analyze their performance.
-
 # APPARATUS REQUIRED:
 Vivado 2023.1
-
 # PROCEDURE
 1. Launch Vivado
 Open Vivado 2023.1 by double-clicking the Vivado icon or searching for it in the Start menu.
@@ -51,15 +48,11 @@ Take screenshots of the waveform window and include them in your lab report to d
 You can include the timing diagram from the simulation window showing the correct functionality of the 4:1 MUX across different select inputs and data inputs.
 10. Close the Simulation
 Once done, close the simulation by going to Simulation → "Close Simulation".
-
 # LOGIC DIAGRAM
 ![Screenshot 2024-09-09 080858](https://github.com/user-attachments/assets/54f82207-5f07-4e3b-8b44-cdec1a710430)
-
 # TRUTH TABLE
 ![image](https://github.com/user-attachments/assets/c850506c-3f6e-4d6b-8574-939a914b2a5f)
-
 # VERILOG CODE
-
 # 4:1 MUX Gate-Level Implementation
     mux4_to_1_gate.v
     module mux4_to_1_gate (
@@ -73,21 +66,17 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
     );
     wire not_S0, not_S1;
     wire A_and, B_and, C_and, D_and;
-
     Inverters for select lines
     not (not_S0, S0);
     not (not_S1, S1);
-
     AND gates for each input with select lines
     and (A_and, A, not_S1, not_S0);
     and (B_and, B, not_S1, S0);
     and (C_and, C, S1, not_S0);
     and (D_and, D, S1, S0);
-
     OR gate to combine all AND gate outputs
     or (Y, A_and, B_and, C_and, D_and);
     endmodule
-
 # 4:1 MUX Data Flow Implementation
     mux4_to_1_dataflow.v
     module mux4_to_1_dataflow (
@@ -104,7 +93,6 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
                (S1 & ~S0 & C) |
                (S1 & S0 & D);
     endmodule
-
 # 4:1 MUX Behavioral Implementation
     module mux(i,s,y);
     input[3:0]i;
@@ -121,7 +109,6 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
     endcase
     end
     endmodule
-
 # 4:1 MUX Structural Implementation
     mux2_to_1.v
     module mux2_to_1 (
@@ -132,7 +119,6 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
     );
     assign Y = S ? B : A;
     endmodule
-
     mux4_to_1_structural.v
     module mux4_to_1_structural (
     input wire A,
@@ -144,19 +130,15 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
     output wire Y
     );
     wire mux_low, mux_high;
-
     Instantiate two 2:1 MUXes
     mux2_to_1 mux0 (.A(A), .B(B), .S(S0), .Y(mux_low));
     mux2_to_1 mux1 (.A(C), .B(D), .S(S0), .Y(mux_high));
-
     Instantiate the final 2:1 MUX
     mux2_to_1 mux_final (.A(mux_low), .B(mux_high), .S(S1), .Y(Y));
     endmodule
-
 # Testbench Implementation
     mux4_to_1_tb.v
     `timescale 1ns / 1ps
-
     module mux4_to_1_tb;
     // Inputs
     reg A;
@@ -165,13 +147,11 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
     reg D;
     reg S0;
     reg S1;
-
     Outputs
     wire Y_gate;
     wire Y_dataflow;
     wire Y_behavioral;
     wire Y_structural;
-
     Instantiate the Gate-Level MUX
     mux4_to_1_gate uut_gate (
         .A(A),
@@ -182,7 +162,6 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
         .S1(S1),
         .Y(Y_gate)
     );
-
     Instantiate the Data Flow MUX
     mux4_to_1_dataflow uut_dataflow (
         .A(A),
@@ -193,7 +172,6 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
         .S1(S1),
         .Y(Y_dataflow)
     );
-
     Instantiate the Behavioral MUX
     mux4_to_1_behavioral uut_behavioral (
         .A(A),
@@ -204,7 +182,6 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
         .S1(S1),
         .Y(Y_behavioral)
     );
-
     Instantiate the Structural MUX
     mux4_to_1_structural uut_structural (
         .A(A),
@@ -215,12 +192,10 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
         .S1(S1),
         .Y(Y_structural)
     );
-
     Test vectors
     initial begin
         Initialize Inputs
         A = 0; B = 0; C = 0; D = 0; S0 = 0; S1 = 0;
-
         Apply test cases
         #10 {S1, S0, A, B, C, D} = 6'b00_0000; // Y = A = 0
         #10 {S1, S0, A, B, C, D} = 6'b00_0001; // Y = A = 1
@@ -233,16 +208,13 @@ Once done, close the simulation by going to Simulation → "Close Simulation".
         #10 {S1, S0, A, B, C, D} = 6'b00_1111; // Y = A = 1
         #10 $stop;
     end
-
     Monitor the outputs
     initial begin
         $monitor("Time=%0t | S1=%b S0=%b | Inputs: A=%b B=%b C=%b D=%b | Y_gate=%b | Y_dataflow=%b | Y_behavioral=%b | Y_structural=%b",
                  $time, S1, S0, A, B, C, D, Y_gate, Y_dataflow, Y_behavioral, Y_structural);
     end
     endmodule
-
 # OUTPUT
 ![Screenshot 2024-09-09 080945](https://github.com/user-attachments/assets/b074deab-d15e-4ca4-8912-776bc39efae1)
-
 # CONCLUSION:
 In this experiment, a 4:1 Multiplexer was successfully designed and simulated using Verilog HDL across four different modeling styles: Gate-Level, Data Flow, Behavioral, and Structural. The simulation results verified the correct functionality of the MUX, with all implementations producing identical outputs for the given input conditions.
